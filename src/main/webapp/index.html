@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>To Do</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+
+        //Отправляет данные в сервлет.
+        function sendData(sndId, sndDesc, sndDone) {
+            var sendingItem = {
+                "itemId": sndId,
+                "itemDesc": sndDesc,
+                "itemCreated": null,
+                "itemDone": sndDone
+            };
+            $.ajax({
+                url: './todo',
+                method: 'post',
+                data: JSON.stringify(sendingItem),
+                complete: function () {
+                    loadToDo();
+                    window.location.reload();
+                }
+            })
+        }
+
+        //Загружает данные от сервлета
+        //и заполняет таблицу в документе.
+        function loadToDo() {
+            var bufferFlag = document.getElementById('galka').checked;
+            var dataString = "flag=" + bufferFlag;
+            $.ajax({
+                url: './todo',
+                method: 'get',
+                data: dataString,
+                complete: function (data) {
+                    var list = JSON.parse(data.responseText);
+                    var result = "<h3>To Do List:</h3>"
+                        + "<table class=\"table table-bordered\">"
+                        + "<thead>"
+                        + "<tr>"
+                        + "<th scope=\"col\">id</th>"
+                        + "<th scope=\"col\">Description</th>"
+                        + "<th scope=\"col\">Time of creation</th>"
+                        + "<th scope=\"col\">is Done?</th>"
+                        + "</tr>"
+                        + "</thead>"
+                        + "<tbody>";
+                    for (var i = 0; i < list.length; i++) {
+                        result += "<tr>"
+                            + "<td>" + list[i].itemId + "</td>"
+                            + "<td>" + list[i].itemDesc + "</td>"
+                            + "<td>" + list[i].itemCreated + "</td>";
+                        if (list[i].itemDone) {
+                            result += "<td>Yep</td>"
+                        } else {
+                            result += "<td>"
+                                + "<form>"
+                                + "<button type=\"button\" class=\"btn btn-secondary btn-sm\" "
+                                + "onclick=\"sendData("
+                                + list[i].itemId + ", null, true)\">Nope</button>"
+                                + "</form></td>"
+                        }
+                        result += "</tr>";
+                    }
+                    result += "</tbody>"
+                        + "</table>";
+                    var countrySelect = document.getElementById("table");
+                    countrySelect.innerHTML = result;
+                }
+            })
+        }
+
+    </script>
+
+</head>
+<body>
+
+<div class="container" style="margin-top: 50px">
+    <form>
+        <div>
+            <input type="text" class="form-control" id="desc" placeholder="Description">
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm"
+                onclick="sendData(null, $('#desc').val(), false)">Create
+        </button>
+    </form>
+    <div>
+        <input type="checkbox" id="galka" onclick="loadToDo()">Show all</br>
+    </div>
+    <div id="table">
+        <!--Размещаем таблицу.-->
+    </div>
+</div>
+
+<script>
+    $(loadToDo());
+</script>
+
+</body>
+</html>

@@ -26,6 +26,7 @@
 
         <!-- List of XML mapping files -->
         <mapping resource = "simpleexample/models/User.hbm.xml"/>
+        <mapping resource = "todolist/persistence/model/Item.hbm.xml"/>
 
     </session-factory>
 </hibernate-configuration>
