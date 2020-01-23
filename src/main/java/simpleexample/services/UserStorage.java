@@ -1,8 +1,11 @@
 package simpleexample.services;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import simpleexample.models.User;
 import simpleexample.models.UserDAO;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -11,7 +14,14 @@ import java.util.List;
 public class UserStorage {
     public static void main(String[] args) {
 
-        UserDAO userDAO = new UserDAO();
+        SessionFactory factory = new Configuration()
+                .configure()
+                .buildSessionFactory();
+
+        Calendar calendar = Calendar.getInstance();
+        System.out.println(calendar.getTime());
+
+        UserDAO userDAO = new UserDAO(factory);
         User user = new User();
         User buffer = null;
         user.setId(3);
@@ -20,6 +30,7 @@ public class UserStorage {
         userDAO.addUser(user);
         buffer = userDAO.findUser(user.getId());
         System.out.println(buffer.getId() + " : " + buffer.getName());
+        System.out.println(buffer.getExpired() + " : " + buffer.getName());
 
         user.setName("New_3_name");
         userDAO.updateUser(user);
@@ -40,5 +51,6 @@ public class UserStorage {
             System.out.println(u.getId() + " : " + u.getName());
         }
 
+        factory.close();
     }
 }
