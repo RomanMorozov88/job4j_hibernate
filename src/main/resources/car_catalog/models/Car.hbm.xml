@@ -1,0 +1,27 @@
+<hibernate-mapping>
+    <class name="car_catalog.models.Car" table="car">
+        <id name="carId" column="id">
+            <generator class="assigned"/>
+        </id>
+        <property name="carName" column="name_car"/>
+        <many-to-one name="engine"
+                     column="id_engine"
+                     class="car_catalog.models.Engine"/>
+        <many-to-one name="carBody"
+                     column="id_carbody"
+                     class="car_catalog.models.CarBody"/>
+        <many-to-one name="transmission"
+                     column="id_transmission"
+                     class="car_catalog.models.Transmission"/>
+        <set name="owners" table="history_owner"
+             inverse="true" lazy="true" fetch="select" cascade="all">
+            <key>
+                <column name="car_id" not-null="true"/>
+            </key>
+            <many-to-many entity-name="car_catalog.models.Owner">
+                <column name="driver_id" not-null="true"/>
+            </many-to-many>
+        </set>
+
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,8 @@
+<hibernate-mapping>
+    <class name="car_catalog.models.Engine" table="engine">
+        <id name="engineId" column="id">
+            <generator class="assigned"/>
+        </id>
+        <property name="engineName" column="name_engine"/>
+    </class>
+</hibernate-mapping>
