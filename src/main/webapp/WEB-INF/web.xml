@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<web-app>
+
+    <!--===============================================================================================-->
+    <servlet>
+        <servlet-name>ToDoServlet</servlet-name>
+        <servlet-class>todolist.controller.ToDoServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ToDoServlet</servlet-name>
+        <url-pattern>/todo</url-pattern>
+        <load-on-startup>1</load-on-startup>
+    </servlet-mapping>
+
+</web-app>
